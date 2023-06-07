@@ -56,11 +56,13 @@ public class Urna {
           case 2 -> tseMenu();
           case 0 -> exit = true;
           default -> print("Comando inválido\n");
-        }
+        }        
         print("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
+        currentElection.saveVotesToFile("../votos.txt");
       }
     } catch (Exception e) {
       print("Erro inesperado\n");
+      currentElection.saveVotesToFile("../votos.txt");      
     }
   }
   
