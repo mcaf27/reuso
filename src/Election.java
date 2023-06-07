@@ -8,6 +8,7 @@ public class Election {
     private final String password;
     
     private boolean status;
+    private boolean preferenceOrder;
     
     public final int MAX = 3;
     private Map<Voter, Integer> votersPresident = new HashMap<Voter, Integer>();
@@ -20,8 +21,15 @@ public class Election {
         this.password = password;
         this.status = false;
         
-        if (preferenceOrder) this.strat = new PreferenceOrderStrategy();
+        if (preferenceOrder) {
+            this.strat = new PreferenceOrderStrategy();
+            this.preferenceOrder = true;
+        }
         else this.strat = new RegularStrategy(secondTurn);
+    }
+
+    public boolean getIsPreferenceOrder() {
+        return this.preferenceOrder;
     }
     
     public boolean isVoteValid(Candidate candidate, Voter voter) {
