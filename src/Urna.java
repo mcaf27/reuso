@@ -180,7 +180,13 @@ public class Urna {
     
     private static boolean voteFederalDeputy(Voter voter, int counter) {
       print("(ext) Desistir");
-      print("Digite o número do " + counter + "º candidato escolhido por você para deputado federal:\n");
+      
+      if (currentElection.getIsPreferenceOrder()) {
+        print("Digite o número dos candidatos escolhidos por você para deputado federal:\n");
+      } else {
+        print("Digite o número do " + counter + "º candidato escolhido por você para deputado federal:\n");
+      }
+
       String vote = readString();
       if (vote.equals("ext"))
       throw new Error("Saindo da votação");
@@ -269,12 +275,14 @@ public class Urna {
           print("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
           
           if (voteFederalDeputy(voter, 1))
-          print("Primeiro voto para deputado federal registrado com sucesso");
+          print(currentElection.getIsPreferenceOrder() ? "Voto" : "Primeiro voto" + " para deputado federal registrado com sucesso");
           print("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
           
-          if (voteFederalDeputy(voter, 2))
-          print("Segundo voto para deputado federal registrado com sucesso");
-          print("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
+          if (!currentElection.getIsPreferenceOrder()) {
+            if (voteFederalDeputy(voter, 2))
+              print("Segundo voto para deputado federal registrado com sucesso");
+              print("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
+          }
           
         } catch (Error e) {
           print(e.getMessage());

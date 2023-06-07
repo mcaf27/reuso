@@ -1,12 +1,47 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class PreferenceOrderStrategy extends VotingStrategy {
     
-    private Map<Voter, Candidate[]> votesPresident = new HashMap<Voter, Candidate[]>();
-    private Map<Voter, Candidate[]> votesFederalDeputy = new HashMap<Voter, Candidate[]>();
+    private Map<Voter, ArrayList<Candidate>> votesPresident = new HashMap<Voter, ArrayList<Candidate>>();
+    private Map<Voter, ArrayList<Candidate>> votesFederalDeputy = new HashMap<Voter, ArrayList<Candidate>>();
+
+    public static Map<String, Object> getCandidatesByVotes(Map<Voter, ArrayList<Candidate>> voteMap, int last) {
+        Map<Integer, Candidate> candidateVotesMap = new LinkedHashMap<>();
+        int totalVotes = 0;
+
+        for (ArrayList<Candidate> candidateList : voteMap.values()) {
+            int count = 0;
+            for (Candidate candidate : candidateList) {
+                int number = candidate.getNumber();
+                int numVotes = candidate.numVotes;
+                totalVotes += numVotes;
+                if (!candidateVotesMap.containsKey(number)) {
+                    candidateVotesMap.put(number, candidate);
+                } else {
+                    Candidate existingCandidate = candidateVotesMap.get(number);
+                    existingCandidate.numVotes += numVotes;
+                }
+                count++;
+                if (count >= last) {
+                    break;
+                }
+            }
+        }
+
+        ArrayList<Candidate> allCandidates = new ArrayList<>(candidateVotesMap.values());
+        Collections.sort(allCandidates, (c1, c2) -> Integer.compare(c2.numVotes, c1.numVotes));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("rankedCandidates", allCandidates);
+        result.put("totalVotes", totalVotes);
+
+        return result;
+    }
     
     @Override
     public boolean computeVote(Election election, ArrayList<Candidate> candidates, Voter voter) {
@@ -17,45 +52,41 @@ public class PreferenceOrderStrategy extends VotingStrategy {
             }
         }
         
-        candidates.get(0).numVotes++;
-        Candidate [] candidatesArray = candidates.toArray(new Candidate[candidates.size()]);
+        for (Candidate candidate : candidates) {
+            candidate.numVotes++;
+        }
 
         if (candidates.get(0) instanceof President) {
-            votesPresident.put(voter, candidatesArray);
+            votesPresident.put(voter, candidates);
         } else {
-            votesFederalDeputy.put(voter, candidatesArray);
+            votesFederalDeputy.put(voter, candidates);
         }
         
         return true;
+    }
+
+    private List<Candidate> getRankedList(String type, int last) {
+        Map<String, Object> result = getCandidatesByVotes(type.equals("P") ? votesPresident : votesFederalDeputy, last);
+
+        @SuppressWarnings("unchecked")
+        var rankedList = (ArrayList<Candidate>) result.get("rankedCandidates");
+        int totalVotes = (int) result.get("totalVotes");
+
+        if (totalVotes > (1/2) * rankedList.get(0).numVotes) {
+            return rankedList;
+        }
+        return getRankedList(type, last + 1);
     }
     
     @Override
     public String getResults() {
         
-        //todo: ordem de preferência
+        List<Candidate> presidentRank = getRankedList("P", 0);
+        List<Candidate> federalDeputyRank = getRankedList("FP", 0);
+
+        int numVoters = votesPresident.size();
         
-        var presidentRank = new ArrayList<President>();
-        var federalDeputyRank = new ArrayList<FederalDeputy>();
-        
-        for (Map.Entry<Integer, President> candidateEntry : presidentCandidates.entrySet()) {
-            President candidate = candidateEntry.getValue();
-            presidentRank.add(candidate);
-        }
-        
-        for (Map.Entry<String, FederalDeputy> candidateEntry : federalDeputyCandidates.entrySet()) {
-            FederalDeputy candidate = candidateEntry.getValue();
-            federalDeputyRank.add(candidate);
-        }
-        
-        var sortedFederalDeputyRank = federalDeputyRank.stream()
-        .sorted((o1, o2) -> o1.numVotes == o2.numVotes ? 0 : o1.numVotes < o2.numVotes ? 1 : -1)
-        .collect(Collectors.toList());
-        
-        var sortedPresidentRank = presidentRank.stream()
-        .sorted((o1, o2) -> o1.numVotes == o2.numVotes ? 0 : o1.numVotes < o2.numVotes ? 1 : -1)
-        .collect(Collectors.toList());
-        
-        return super.results(4, 5, sortedPresidentRank, sortedFederalDeputyRank);
+        return super.results(numVoters, numVoters * 2, presidentRank, federalDeputyRank);
         
     }
     

@@ -13,6 +13,9 @@ public class Main {
         currentElection.addPresidentCandidate(presidentCandidate1, electionPassword);
         President presidentCandidate2 = new President.Builder().name("Maria").number(124).party("ED").build();
         currentElection.addPresidentCandidate(presidentCandidate2, electionPassword);
+        President presidentCandidate3 = new President.Builder().name("José").number(125).party("ALG1").build();
+        currentElection.addPresidentCandidate(presidentCandidate3, electionPassword);
+        
         FederalDeputy federalDeputyCandidate1 = new FederalDeputy.Builder().name("Carlos").number(12345).party("PDS1")
             .state("MG").build();
         currentElection.addFederalDeputyCandidate(federalDeputyCandidate1, electionPassword);

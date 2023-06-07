@@ -42,8 +42,8 @@ public class RegularStrategy extends VotingStrategy {
    
     @Override
     public String getResults() {
-        var presidentRank = new ArrayList<President>();
-        var federalDeputyRank = new ArrayList<FederalDeputy>();
+        var presidentRank = new ArrayList<Candidate>();
+        var federalDeputyRank = new ArrayList<Candidate>();
 
         int totalVotesP = super.presidentProtestVotes + super.nullPresidentVotes;
         for (Map.Entry<Integer, President> candidateEntry : presidentCandidates.entrySet()) {
