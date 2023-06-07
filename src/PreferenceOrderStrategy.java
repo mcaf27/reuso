@@ -82,29 +82,11 @@ public class PreferenceOrderStrategy extends VotingStrategy {
     public String getResults() {
         
         List<Candidate> presidentRank = getRankedList("P", 0);
-        List<Candidate> federalDeputyRank = getRankedList("FP", 0);
+        List<Candidate> federalDeputyRank = getRankedList("FD", 0);
 
         int numVoters = votesPresident.size();
         
         return super.results(numVoters, numVoters * 2, presidentRank, federalDeputyRank);
         
-    }
-    
-    @Override
-    public boolean computeNullVote(Election election, Voter voter, String type) {
-        boolean isValid = election.hasVoterAlreadyVoted(voter, type);
-        if (type == "P") nullPresidentVotes++;
-        else nullFederalDeputyVotes++;
-        
-        return isValid;
-    }
-
-    @Override
-    public boolean computeProtestVote(Election election, Voter voter, String type) {
-        boolean isValid = election.hasVoterAlreadyVoted(voter, type);
-        if (type == "P") presidentProtestVotes++;
-        else federalDeputyProtestVotes++;
-
-        return isValid;
     }
 }

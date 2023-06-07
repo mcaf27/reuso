@@ -1,8 +1,8 @@
 public class Main {
     public static void main(String [] args) {
 
-        boolean preferenceOrder = args[0].equals("preferenceOrder");
-        boolean secondTurn = args[1].equals("secondTurn");
+        boolean preferenceOrder = args[0].equals("true");
+        boolean secondTurn = args[1].equals("true");
         String electionPassword = "password";
 
         Election currentElection = new Election(electionPassword, preferenceOrder, secondTurn);

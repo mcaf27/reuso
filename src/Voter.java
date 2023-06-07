@@ -60,19 +60,19 @@ public class Voter {
     
     if (candidates != null) {
       election.strat.computeVote(election, candidates, this);
-    }
-    
-    if (type.equals("P")) {
-      if (isProtestVote) {
-        election.strat.computeProtestVote(election, this, "P");
-      } else {
-        election.strat.computeNullVote(election, this, "P");
-      }
     } else {
-      if (isProtestVote) {
-        election.strat.computeProtestVote(election, this, "FP");
+      if (type.equals("P")) {
+        if (isProtestVote) {
+          election.strat.computeProtestVote(election, this, "P");
+        } else {
+          election.strat.computeNullVote(election, this, "P");
+        }
       } else {
-        election.strat.computeNullVote(election, this, "FP");
+        if (isProtestVote) {
+          election.strat.computeProtestVote(election, this, "FD");
+        } else {
+          election.strat.computeNullVote(election, this, "FD");
+        }
       }
     }
   }

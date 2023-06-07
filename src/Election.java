@@ -1,5 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Election {
     
@@ -64,7 +67,7 @@ public class Election {
     }
     
     public boolean hasVoterAlreadyVoted(Voter voter, String type) {
-        if (type == "P") return votersPresident.get(voter) != null && votersPresident.get(voter) >= 1;
+        if (type.equals("P")) return votersPresident.get(voter) != null && votersPresident.get(voter) >= 1;
         else return votersFederalDeputy.get(voter) != null && votersFederalDeputy.get(voter) >= 2;
     }
     

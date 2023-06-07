@@ -1,0 +1,32 @@
+Resultado da eleicao:
+  Votos presidente:
+  Total: 1
+  Votos nulos: 0 (0.00%)
+  Votos brancos: 0 (0.00%)
+	Numero - Partido - Nome  - Votos  - % dos votos totais
+	124 - ED - Maria - 1 - 100.00%
+	123 - PDS1 - João - 0 - 0.00%
+	125 - ALG1 - José - 0 - 0.00%
+
+
+  Presidente eleito:
+  Maria do ED com 100.00% dos votos
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+
+  Votos deputado federal:
+  Votos nulos: 0 (0.00%)
+  Votos brancos: 0 (0.00%)
+  Total: 2
+	Numero - Partido - Nome - Votos - % dos votos totais
+	12345 - PDS1 - Carlos - 1 - 50.00%
+	11211 - IHC - Sofia - 1 - 50.00%
+	54321 - PDS2 - Cleber - 0 - 0.00%
+
+
+  Deputados eleitos:
+  1Âº Carlos do PDS1 com 50.00% dos votos
+  2Âº Sofia do IHC com 50.00% dos votos
+

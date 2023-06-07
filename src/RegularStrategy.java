@@ -69,22 +69,4 @@ public class RegularStrategy extends VotingStrategy {
         
         return super.results(totalVotesP, totalVotesFD, sortedPresidentRank, sortedFederalDeputyRank);
     }
-    
-    @Override
-    public boolean computeNullVote(Election election, Voter voter, String type) {
-        boolean isValid = election.hasVoterAlreadyVoted(voter, type);
-        if (type == "P") nullPresidentVotes++;
-        else nullFederalDeputyVotes++;
-
-        return isValid;
-    }
-
-    @Override
-    public boolean computeProtestVote(Election election, Voter voter, String type) {
-        boolean isValid = election.hasVoterAlreadyVoted(voter, type);
-        if (type == "P") presidentProtestVotes++;
-        else federalDeputyProtestVotes++;
-
-        return isValid;
-    }
 }

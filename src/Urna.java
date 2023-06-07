@@ -91,12 +91,12 @@ public class Urna {
   private static boolean voteWhite(Voter voter, String type) {
     print("Você está votando branco\n");
     print("(1) Confirmar\n(2) Mudar voto");
-        int confirm = readInt();
-        if (confirm == 1) {
-            voter.vote(currentElection, type, true, null);
-            return true;
-        }
-        return false;
+    int confirm = readInt();
+    if (confirm == 1) {
+      voter.vote(currentElection, type, true, null);
+      return true;
+    }
+    return false;
   }
   
 
@@ -114,12 +114,14 @@ public class Urna {
   private static boolean votePresident(Voter voter) {
     print("(ext) Desistir");
     print("Digite o número do candidato escolhido por você para presidente:");
+    
     String vote = readString();
-    if (vote.equals("ext"))
-    throw new Error("Saindo da votação");
+    if (vote.equals("ext")) {
+      throw new Error("Saindo da votação");
+    }
     // Branco
     else if (vote.equals("br")) {
-      if (!voteWhite(voter, "President")) {
+      if (!voteWhite(voter, "P")) {
         return votePresident(voter);
       }
       return true;
@@ -127,8 +129,9 @@ public class Urna {
       try {
         int voteNumber = Integer.parseInt(vote);
         // Nulo
+
         if (voteNumber == 0) {
-          if (!voteNull(voter, "President")) {
+          if (!voteNull(voter, "P")) {
             return votePresident(voter);
           }
           return true;
@@ -194,7 +197,7 @@ public class Urna {
       throw new Error("Saindo da votação");
       // Branco
       if (vote.equals("br")) {
-        if (!voteWhite(voter, "FederalDeputy")) {
+        if (!voteWhite(voter, "FD")) {
           return voteFederalDeputy(voter, counter);
         }
         return true;
@@ -203,7 +206,7 @@ public class Urna {
           int voteNumber = Integer.parseInt(vote);
           // Nulo
           if (voteNumber == 0) {
-            if (!voteNull(voter, "FederalDeputy")) {
+            if (!voteNull(voter, "FD")) {
               return voteFederalDeputy(voter, counter);
             }
             return true;
@@ -235,7 +238,7 @@ public class Urna {
           print("(1) Confirmar\n(2) Mudar voto");
           int confirm = readInt();
           if (confirm == 1) {
-            voter.vote(currentElection, "FP", false, candidates);
+            voter.vote(currentElection, "FD", false, candidates);
             return true;
           } else if (confirm == 2)
           return voteFederalDeputy(voter, counter);

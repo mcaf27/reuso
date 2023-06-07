@@ -8,18 +8,40 @@ public abstract class VotingStrategy {
     public Map<Integer, President> presidentCandidates = new HashMap<Integer, President>();
     public Map<String, FederalDeputy> federalDeputyCandidates = new HashMap<String, FederalDeputy>();
 
-    protected int nullPresidentVotes;
-    protected int nullFederalDeputyVotes;
-    protected int presidentProtestVotes;
-    protected int federalDeputyProtestVotes;
+    protected int nullPresidentVotes = 0;
+    protected int nullFederalDeputyVotes = 0;
+    protected int presidentProtestVotes = 0;
+    protected int federalDeputyProtestVotes = 0;
     public boolean secondTurn;
 
     public abstract boolean computeVote(
         Election election, ArrayList<Candidate> candidates, Voter voter
     );
     
-    public abstract boolean computeNullVote(Election election, Voter voter, String type);
-    public abstract boolean computeProtestVote(Election election, Voter voter, String type);
+    public boolean computeNullVote(Election election, Voter voter, String type) {
+        boolean already = election.hasVoterAlreadyVoted(voter, type);
+        
+        if (!already) {
+            if (type.equals("P")) nullPresidentVotes++;
+            else nullFederalDeputyVotes++;
+            return true;
+        } 
+        
+        return false;
+    }
+
+    public boolean computeProtestVote(Election election, Voter voter, String type) {
+        boolean already = election.hasVoterAlreadyVoted(voter, type);
+        
+        if (!already) {
+            if (type.equals("P")) this.presidentProtestVotes++;
+            else this.federalDeputyProtestVotes++;
+            return true;
+        } 
+        
+        return false;
+    }
+
     public abstract String getResults();
 
     public String results(
@@ -34,10 +56,10 @@ public abstract class VotingStrategy {
 
         builder.append("  Votos presidente:\n");
         builder.append("  Total: " + totalVotesP + "\n");
-        builder.append("  Votos nulos: " + nullPresidentVotes + " ("
-            + decimalFormater.format((double) nullPresidentVotes / (double) totalVotesFD * 100) + "%)\n");
-        builder.append("  Votos brancos: " + presidentProtestVotes + " ("
-            + decimalFormater.format((double) presidentProtestVotes / (double) totalVotesFD * 100) + "%)\n");
+        builder.append("  Votos nulos: " + this.nullPresidentVotes + " ("
+            + decimalFormater.format((double) this.nullPresidentVotes / (double) totalVotesFD * 100) + "%)\n");
+        builder.append("  Votos brancos: " + this.presidentProtestVotes + " ("
+            + decimalFormater.format((double) this.presidentProtestVotes / (double) totalVotesFD * 100) + "%)\n");
         builder.append("\tNumero - Partido - Nome  - Votos  - % dos votos totais\n");
         
         for (Candidate candidate : sortedPresidentRank) {
@@ -54,10 +76,10 @@ public abstract class VotingStrategy {
         builder.append("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
     
         builder.append("\n\n  Votos deputado federal:\n");
-        builder.append("  Votos nulos: " + nullFederalDeputyVotes + " ("
-            + decimalFormater.format((double) nullFederalDeputyVotes / (double) totalVotesFD * 100) + "%)\n");
-        builder.append("  Votos brancos: " + federalDeputyProtestVotes + " ("
-            + decimalFormater.format((double) federalDeputyProtestVotes / (double) totalVotesFD * 100) + "%)\n");
+        builder.append("  Votos nulos: " + this.nullFederalDeputyVotes + " ("
+            + decimalFormater.format((double) this.nullFederalDeputyVotes / (double) totalVotesFD * 100) + "%)\n");
+        builder.append("  Votos brancos: " + this.federalDeputyProtestVotes + " ("
+            + decimalFormater.format((double) this.federalDeputyProtestVotes / (double) totalVotesFD * 100) + "%)\n");
         builder.append("  Total: " + totalVotesFD + "\n");
         builder.append("\tNumero - Partido - Nome - Votos - % dos votos totais\n");
         for (Candidate candidate : sortedFederalDeputyRank) {
