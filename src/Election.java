@@ -31,7 +31,18 @@ public class Election {
     public boolean getIsPreferenceOrder() {
         return this.preferenceOrder;
     }
-    
+  
+	public void saveVotesToFile(String fileName) {
+
+		try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+			writer.println(strat.getResults());
+			System.out.println("Votos salvos no arquivo " + fileName);
+		} catch (IOException e) {
+			System.out.println("Ocorreu um erro ao salvar os votos no arquivo.");
+			e.printStackTrace();
+		}
+	}
+
     public boolean isVoteValid(Candidate candidate, Voter voter) {
         if (candidate instanceof President) {
             if (hasVoterAlreadyVoted(voter, "P")) {
