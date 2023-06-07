@@ -12,6 +12,16 @@ public class PreferenceOrderStrategy extends VotingStrategy {
 
     public static Map<String, Object> getCandidatesByVotes(Map<Voter, ArrayList<Candidate>> voteMap, int last) {
         Map<Integer, Candidate> candidateVotesMap = new LinkedHashMap<>();
+        ArrayList<Candidate> allCandidates = new ArrayList<>();
+
+        if (voteMap.size() == 0) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("rankedCandidates", allCandidates);
+            result.put("totalVotes", 0);
+
+            return result;
+        }
+
         int totalVotes = 0;
 
         for (ArrayList<Candidate> candidateList : voteMap.values()) {
@@ -33,7 +43,7 @@ public class PreferenceOrderStrategy extends VotingStrategy {
             }
         }
 
-        ArrayList<Candidate> allCandidates = new ArrayList<>(candidateVotesMap.values());
+        allCandidates = new ArrayList<>(candidateVotesMap.values());
         Collections.sort(allCandidates, (c1, c2) -> Integer.compare(c2.numVotes, c1.numVotes));
 
         Map<String, Object> result = new HashMap<>();
@@ -66,7 +76,13 @@ public class PreferenceOrderStrategy extends VotingStrategy {
     }
 
     private List<Candidate> getRankedList(String type, int last) {
-        Map<String, Object> result = getCandidatesByVotes(type.equals("P") ? votesPresident : votesFederalDeputy, last);
+        var votes = type.equals("P") ? votesPresident : votesFederalDeputy;
+
+        if (votes.size() == 0) {
+            return new ArrayList<Candidate>();
+        }
+
+        Map<String, Object> result = getCandidatesByVotes(votes, last);
 
         @SuppressWarnings("unchecked")
         var rankedList = (ArrayList<Candidate>) result.get("rankedCandidates");
@@ -82,7 +98,7 @@ public class PreferenceOrderStrategy extends VotingStrategy {
     public String getResults() {
         
         List<Candidate> presidentRank = getRankedList("P", 0);
-        List<Candidate> federalDeputyRank = getRankedList("FD", 0);
+        List<Candidate> federalDeputyRank = getRankedList("FD", 1);
 
         int numVoters = votesPresident.size();
         

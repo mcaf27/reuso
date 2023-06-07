@@ -50,6 +50,11 @@ public abstract class VotingStrategy {
         List<Candidate> sortedPresidentRank,
         List<Candidate> sortedFederalDeputyRank
     ) {
+
+        if (sortedFederalDeputyRank.size() <= 1 || sortedPresidentRank.size() <= 0) {
+            return "Quantidade de votos insuficiente";
+        }
+
         var decimalFormater = new DecimalFormat("0.00");
         var builder = new StringBuilder();
         builder.append("Resultado da eleicao:\n");

@@ -9,6 +9,8 @@ public class Election {
     public VotingStrategy strat;
     
     private final String password;
+
+    private static Election instance;
     
     private boolean status;
     private boolean preferenceOrder;
@@ -20,7 +22,7 @@ public class Election {
     private Map<String, FederalDeputy> federalDeputyCandidates = new HashMap<String, FederalDeputy>();
     private Map<Voter, FederalDeputy> tempFDVote = new HashMap<Voter, FederalDeputy>();
     
-    protected Election(String password, boolean preferenceOrder, boolean secondTurn) {
+    private Election(String password, boolean preferenceOrder, boolean secondTurn) {
         this.password = password;
         this.status = false;
         
@@ -29,6 +31,13 @@ public class Election {
             this.preferenceOrder = true;
         }
         else this.strat = new RegularStrategy(secondTurn);
+    }
+
+    public static Election getInstance(String password, boolean preferenceOrder, boolean secondTurn) {
+        if (instance == null) {
+            instance = new Election(password, preferenceOrder, secondTurn);
+        }
+        return instance;
     }
 
     public boolean getIsPreferenceOrder() {

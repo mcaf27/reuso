@@ -5,7 +5,7 @@ public class Main {
         boolean secondTurn = args[1].equals("true");
         String electionPassword = "password";
 
-        Election currentElection = new Election(electionPassword, preferenceOrder, secondTurn);
+        Election currentElection = Election.getInstance(electionPassword, preferenceOrder, secondTurn);
 
         new Urna(currentElection);
         
