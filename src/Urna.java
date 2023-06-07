@@ -113,7 +113,12 @@ public class Urna {
 
   private static boolean votePresident(Voter voter) {
     print("(ext) Desistir");
-    print("Digite o número do candidato escolhido por você para presidente:");
+    
+    if (Urna.currentElection.getIsPreferenceOrder()) {
+      print("Digite o número de " + Urna.currentElection.MAX + " candidatos escolhidos por você para presidente, em ordem de preferência:");
+    } else {
+      print("Digite o número do candidato escolhido por você para presidente:");
+    }
     
     String vote = readString();
     if (vote.equals("ext")) {
@@ -187,7 +192,7 @@ public class Urna {
       print("(ext) Desistir");
       
       if (currentElection.getIsPreferenceOrder()) {
-        print("Digite o número dos candidatos escolhidos por você para deputado federal:\n");
+        print("Digite o número de " + Urna.currentElection.MAX + " candidatos escolhidos por você para deputado federal, em ordem de preferência:\n");
       } else {
         print("Digite o número do " + counter + "º candidato escolhido por você para deputado federal:\n");
       }
