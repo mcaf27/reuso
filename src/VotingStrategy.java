@@ -75,9 +75,17 @@ public abstract class VotingStrategy {
         }
 
         Candidate electPresident = sortedPresidentRank.get(0);
-        builder.append("\n\n  Presidente eleito:\n");
-        builder.append("  " + electPresident.name + " do " + electPresident.party + " com "
-            + decimalFormater.format((double) electPresident.numVotes / (double) totalVotesP * 100) + "% dos votos\n");
+        double presidentPercentage = (double) electPresident.numVotes / (double) totalVotesP * 100;
+
+        if (presidentPercentage >= 50) {
+			builder.append("A elei??o foi decidida no primeiro turno!");
+            builder.append("\n\n  Presidente eleito:\n");
+            builder.append("  " + electPresident.name + " do " + electPresident.party + " com "
+                + decimalFormater.format((double) electPresident.numVotes / (double) totalVotesP * 100) + "% dos votos\n");
+		} else {
+			builder.append("Elei??o ser? decidida no segundo turno!");
+		}
+
         builder.append("\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n");
     
         builder.append("\n\n  Votos deputado federal:\n");
